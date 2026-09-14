@@ -1,170 +1,146 @@
 # Biblioteca El Roble
 
-**Autor:** Jeremy Rentería Serna
-**Asignatura:** Ingeniería Web
-**Práctica:** Diseño de una aplicación Web temática con Node.js y SQLite (20 %)
-**Temática asignada:** Biblioteca
+**Autor:** Jeremy Renteria Serna  
+**Asignatura:** Ingeniería Web  
+**Temática:** Biblioteca
 
-Aplicación web individual que implementa el sitio de una biblioteca de barrio ficticia. Permite registrar lectores y, con el identificador que genera ese registro, solicitar préstamos de libros. Construida únicamente con módulos incorporados de Node.js (`node:http`, `node:fs`, `node:path`, `node:sqlite`), sin frameworks de frontend ni dependencias externas.
+Aplicación web de una biblioteca desarrollada con Node.js y SQLite. Permite registrar lectores y solicitar préstamos usando el ID generado por el registro.
 
----
+## Tecnologías
 
-## 1. Descripción funcional
+- HTML semántico y CSS externo.
+- Node.js con `node:http`, `node:fs`, `node:path` y `node:sqlite`.
+- SQLite mediante `DatabaseSync`.
+- Sin frameworks ni dependencias externas.
 
-El sitio tiene cuatro páginas y un flujo de uso obligatorio de dos pasos:
+## Estructura
 
-1. **Registro** (`/registro`): el visitante completa un formulario con **nombre, correo y teléfono**. El servidor valida los datos, los inserta en la tabla `lectores` y responde mostrando el **ID de lector** generado por SQLite (`lastInsertRowid`).
-2. **Servicios** (`/servicios`): el lector ya registrado completa un segundo formulario con **su ID de lector, el libro, la fecha del préstamo y los días** que lo necesita. El servidor valida que ese `lector_id` exista, inserta el préstamo en la tabla `prestamos` y confirma la operación.
-
-El segundo formulario nunca vuelve a pedir nombre, correo o teléfono: solo pide el identificador que ya se generó en el primer paso, y ese identificador es lo que conecta las dos tablas.
-
-Página principal (`/`) presenta el proyecto y enlaza al flujo de registro; página **Acerca de** (`/acerca`) explica el propósito del sitio, quiénes somos y datos de contacto ficticios.
-
----
-
-## 2. Tecnologías utilizadas
-
-- **HTML** semántico (`header`, `nav`, `main`, `section`, `footer`) en las 4 páginas.
-- **CSS** externo (`styles.css`), sin frameworks (Bootstrap/Tailwind no se usan).
-- **JavaScript** (Node.js) para el servidor.
-- **Node.js** con el módulo `node:http` para servir rutas GET/POST.
-- **HTTP**: códigos 200, 201, 400, 404 y 500 controlados explícitamente.
-- **SQL / SQLite** mediante `node:sqlite` (`DatabaseSync`) para la persistencia.
-
----
-
-## 3. Árbol de archivos
-
-```
-biblioteca-el-roble/
-├── index.html        # Página principal: presentación del proyecto y del flujo
-├── acerca.html        # Quiénes somos, propósito, horario y ubicación
-├── registro.html       # Formulario de registro de lector (POST /lectores)
-├── servicios.html       # Presentación de servicios + formulario de préstamo (POST /prestamos)
-├── styles.css         # Hoja de estilos compartida por las 4 páginas
-├── server.js          # Servidor HTTP, rutas, validación y persistencia SQLite
-├── biblioteca.db        # Base de datos SQLite con registros de prueba
-└── README.md          # Este archivo
+```text
+ingenieria web/
+├── index.html
+├── acerca.html
+├── registro.html
+├── servicios.html
+├── styles.css
+├── server.js
+├── biblioteca.db
+├── capturas/
+└── README.md
 ```
 
-**Explicación de cada archivo principal**
+## Base de datos
 
-- `server.js`: crea el servidor HTTP, abre/crea `biblioteca.db`, define las tablas `lectores` y `prestamos`, sirve las páginas y `styles.css`, y procesa los dos formularios con validación en servidor e inserciones parametrizadas.
-- `styles.css`: define la identidad visual del sitio (paleta verde bosque / pergamino / latón, tipografía Fraunces + Inter, motivo de lomos de libros), compartida por las cuatro páginas mediante `<link rel="stylesheet" href="/styles.css">`.
-- `index.html`, `acerca.html`, `registro.html`, `servicios.html`: páginas estáticas con estructura semántica; los dos últimos contienen los formularios obligatorios.
+El archivo `biblioteca.db` contiene dos tablas:
 
----
+### `lectores`
 
-## 4. Tabla de rutas
+| Columna | Tipo | Descripción |
+|---|---|---|
+| `id` | INTEGER | ID autoincremental |
+| `nombre` | TEXT | Nombre del lector |
+| `correo` | TEXT | Correo del lector |
+| `telefono` | TEXT | Teléfono del lector |
 
-| Método | Ruta         | Recurso / respuesta                          | Código esperado |
-|--------|--------------|-----------------------------------------------|------------------|
-| GET    | `/`          | `index.html`                                   | 200 |
-| GET    | `/acerca`    | `acerca.html`                                  | 200 |
-| GET    | `/registro`  | `registro.html`                                | 200 |
-| GET    | `/servicios` | `servicios.html`                               | 200 |
-| GET    | `/styles.css`| `styles.css` (`Content-Type: text/css`)        | 200 |
-| POST   | `/lectores`  | Inserta en `lectores`, muestra el ID generado  | 201 (400 si faltan datos) |
-| POST   | `/prestamos` | Inserta en `prestamos` asociado a `lector_id`  | 201 (400 si faltan datos o el lector no existe) |
-| *      | cualquier otra | Página de error                              | 404 |
-| *      | error interno  | Página de error                              | 500 |
+### `prestamos`
 
----
+| Columna | Tipo | Descripción |
+|---|---|---|
+| `id` | INTEGER | ID autoincremental |
+| `lector_id` | INTEGER | ID existente en `lectores` |
+| `libro` | TEXT | Libro solicitado |
+| `fecha_prestamo` | TEXT | Fecha del préstamo |
+| `dias` | INTEGER | Duración del préstamo |
 
-## 5. Modelo de datos
+## Rutas
 
-Base de datos: **`biblioteca.db`** (SQLite, `DatabaseSync` de `node:sqlite`), con dos tablas.
+| Método | Ruta | Función |
+|---|---|---|
+| GET | `/` | Página principal |
+| GET | `/acerca` | Información del proyecto |
+| GET | `/registro` | Formulario de lectores |
+| GET | `/servicios` | Formulario de préstamos |
+| POST | `/lectores` | Registra nombre, correo y teléfono |
+| POST | `/prestamos` | Registra lector_id, libro, fecha_prestamo y dias |
 
-### Tabla `lectores` (entidad principal)
+## Requisitos
 
-| Columna   | Tipo    | Restricciones          | Propósito                        |
-|-----------|---------|--------------------------|-----------------------------------|
-| id        | INTEGER | PRIMARY KEY AUTOINCREMENT | Identificador único del lector    |
-| nombre    | TEXT    | NOT NULL                  | Nombre completo del lector        |
-| correo    | TEXT    | NOT NULL                  | Correo de contacto                |
-| telefono  | TEXT    | NOT NULL                  | Teléfono de contacto              |
+- Node.js 24 o superior. Este proyecto usa `node:sqlite`, incluido en Node.js.
+- No es necesario ejecutar `npm install`.
 
-### Tabla `prestamos` (operación asociada)
+## Ejecutar localmente
 
-| Columna         | Tipo    | Restricciones            | Propósito                                  |
-|------------------|---------|----------------------------|----------------------------------------------|
-| id               | INTEGER | PRIMARY KEY AUTOINCREMENT | Identificador único del préstamo             |
-| lector_id        | INTEGER | NOT NULL                  | Referencia lógica al `id` de `lectores`      |
-| libro            | TEXT    | NOT NULL                  | Título del libro solicitado                  |
-| fecha_prestamo   | TEXT    | NOT NULL                  | Fecha en que se realiza el préstamo          |
-| dias             | INTEGER | NOT NULL                  | Días de duración del préstamo                |
+Desde PowerShell:
 
-No se declara `FOREIGN KEY` (no es obligatorio en esta práctica), pero el servidor verifica en el backend que el `lector_id` recibido exista en `lectores` antes de insertar el préstamo.
-
-El archivo `biblioteca.db` incluido en el repositorio ya contiene registros de prueba en ambas tablas. Si se elimina, `server.js` la vuelve a crear automáticamente (junto con las dos tablas) al iniciar.
-
----
-
-## 6. Cómo se procesa cada POST
-
-1. El servidor lee el cuerpo de la petición como *stream* (`req.on('data' / 'end')`) y lo interpreta con `new URLSearchParams(cuerpo)`.
-2. Cada campo de texto se limpia con `.trim()`.
-3. Si falta algún campo obligatorio, responde **400** con una página que explica qué falta y un enlace de regreso al formulario.
-4. **`/lectores`**: si los datos son válidos, ejecuta el `INSERT` parametrizado preparado (`insertLector.run(...)`), obtiene `lastInsertRowid` y lo muestra en la página de respuesta (201) y en la terminal.
-5. **`/prestamos`**: además de validar que los campos no estén vacíos, valida que `lector_id` y `dias` sean números enteros positivos, y consulta si el `lector_id` existe en `lectores`. Si no existe, responde 400 e invita a registrarse. Si existe, ejecuta el `INSERT` parametrizado (`insertPrestamo.run(...)`) y confirma con 201, mostrando el libro, la fecha, los días y el ID de lector asociado.
-6. Cualquier error no controlado durante la lectura o la inserción se captura con `try/catch` y responde **500** con un mensaje genérico.
-
-Todas las inserciones usan parámetros `?` — nunca se concatenan datos del usuario dentro del SQL.
-
----
-
-## 7. Requisitos previos
-
-- **Node.js 22 o superior** con soporte del módulo `node:sqlite` (recomendado Node 24, tal como pide la práctica). Verificar con `node --version`.
-- No se requiere instalar dependencias (`npm install`) porque el proyecto solo usa módulos incorporados.
-
----
-
-## 8. Instrucciones paso a paso
-
-```bash
-git clone URL_DEL_REPOSITORIO
-cd biblioteca-el-roble
+```powershell
+git clone https://github.com/JeremyRenteria/Biblioteca.git
+cd Biblioteca
 node --version
 node server.js
 ```
 
-Luego abrir en el navegador:
+También se puede ejecutar directamente desde la carpeta local:
 
+```powershell
+cd "C:\Users\maria\Downloads\ingenieria web"
+node server.js
 ```
+
+Luego abre:
+
+```text
 http://localhost:3000
 ```
 
-El servidor imprime en la terminal la URL, la ruta de la base de datos y cada petición que recibe (incluyendo `GET /styles.css`).
+El servidor imprime la URL, la ruta de `biblioteca.db`, las peticiones recibidas y las confirmaciones de los formularios. Para detenerlo, presiona `Ctrl + C`.
 
-**Orden de uso obligatorio dentro de la aplicación:**
+## Prueba manual
 
-1. Entrar a `http://localhost:3000/registro` y completar el formulario de registro.
-2. Copiar el **ID de lector** que muestra la página de confirmación.
-3. Entrar a `http://localhost:3000/servicios`, ingresar ese ID junto con el libro, la fecha y los días, y enviar el formulario de préstamo.
+1. Abre `http://localhost:3000/registro`.
+2. Completa nombre, correo y teléfono.
+3. Guarda el ID generado por SQLite.
+4. Abre `http://localhost:3000/servicios`.
+5. Escribe el ID, libro, fecha y días.
+6. Envía el préstamo y revisa la confirmación en la página y en la terminal.
 
-Si se elimina `biblioteca.db` antes de ejecutar, `node server.js` la crea de nuevo junto con las tablas `lectores` y `prestamos` vacías.
+Ejemplo de confirmación en terminal:
 
----
+```text
+[CONFIRMACION] POST /prestamos — préstamo registrado correctamente
+  lector_id: 7 | libro: "Rayuela" | fecha_prestamo: 2026-09-14 | dias: 10
+```
 
-## 9. Pruebas realizadas y resultados esperados
+## Capturas
 
-| Prueba            | Cómo se probó                                              | Resultado obtenido |
-|--------------------|--------------------------------------------------------------|----------------------|
-| Navegación         | `curl` a `/`, `/acerca`, `/registro`, `/servicios`            | 200 en las cuatro rutas |
-| CSS                | `curl -D - /styles.css`                                       | 200, `Content-Type: text/css; charset=utf-8`, y la terminal registra la petición |
-| Registro           | POST `/lectores` con datos válidos                             | 201 y muestra el ID generado (`lastInsertRowid`) |
-| Servicio           | POST `/prestamos` con un `lector_id` existente                | 201 y crea el préstamo asociado |
-| Coherencia         | Consulta directa a `biblioteca.db`                             | `prestamos.lector_id` referencia un `id` real de `lectores`, sin repetir nombre/correo/teléfono |
-| Validación         | POST `/lectores` con `nombre` vacío                             | 400, no se crea el registro |
-| Validación (FK lógica) | POST `/prestamos` con `lector_id=999` (inexistente)         | 400, no se crea el préstamo |
-| Codificación       | Registro de "María José Peña" y libro "El amor en los tiempos del cólera" | Tildes y ñ almacenados y mostrados correctamente |
-| Persistencia       | Reinicio del servidor y nueva consulta a las tablas             | Los datos de la sesión anterior permanecen |
-| Ruta inexistente   | `GET /noexiste`                                                | 404 |
-| Reproducibilidad   | Clonado en otra carpeta y ejecución con `node server.js`        | Sitio disponible en `http://localhost:3000` sin pasos adicionales |
+Las evidencias están en `capturas/` y también se muestran en esta documentación:
 
----
+### Páginas y respuestas
 
-## 10. Capturas de pantalla
+![Página de inicio](capturas/inicio.png)
 
-*(Espacio para incluir, antes de la entrega final, las capturas solicitadas: las cuatro páginas, el ID generado en el registro, los dos mensajes de confirmación, la terminal mostrando las peticiones, y las tablas `lectores` y `prestamos` abiertas en una herramienta para SQLite como DB Browser for SQLite.)*
+![Página Acerca de](capturas/acerca.png)
+
+![Formulario de registro](capturas/registro.png)
+
+![Formulario de servicios](capturas/servicios.png)
+
+![Registro exitoso con ID generado](capturas/registro-exitoso.png)
+
+![Préstamo registrado](capturas/prestamo-exitoso.png)
+
+### SQLite y terminal
+
+- `tabla1.png`: tabla `lectores` abierta en SQLite.
+- `tabla2.png`: tabla `prestamos` abierta en SQLite.
+- `tabla3.png`: tabla interna `sqlite_sequence`.
+- `terminal.png`: mensajes del servidor y confirmaciones.
+- `paginanoencontrada.png`: respuesta para una ruta inexistente.
+
+![Tabla lectores](capturas/tabla1.png)
+
+![Tabla prestamos](capturas/tabla2.png)
+
+![Tabla sqlite_sequence](capturas/tabla3.png)
+
+![Terminal](capturas/terminal.png)
+
+![Página no encontrada](capturas/paginanoencontrada.png)

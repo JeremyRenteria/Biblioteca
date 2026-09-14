@@ -221,7 +221,7 @@ async function handleRegistrarLector(req, res) {
           <div class="section-heading"><h2>¡Registro exitoso!</h2></div>
           <div class="result-panel">
             <p>Gracias, ${escapeHtml(nombre)}. Ya eres lector de Biblioteca El Roble.</p>
-            <p>Este proyecto fue subido por el dueño del repositorio: JeremyRenteria.</p>
+            <p>Este proyecto fue subido por el dueño del repositorio: Jeremy Renteria Serna.</p>
             <p>Tu identificador de lector es:</p>
             <span class="result-id">${nuevoId}</span>
             <p>Guarda este número: lo necesitarás en la página de Servicios para solicitar un préstamo.</p>
@@ -290,7 +290,8 @@ async function handleRegistrarPrestamo(req, res) {
     const result = insertPrestamo.run(lectorId, libro, fechaPrestamo, dias);
     const prestamoId = result.lastInsertRowid;
 
-    console.log(`[POST /prestamos] Nuevo préstamo #${prestamoId} — lector ${lectorId} — "${libro}"`);
+    console.log(`[CONFIRMACION] POST /prestamos — préstamo #${prestamoId} registrado correctamente`);
+    console.log(`  lector_id: ${lectorId} | libro: "${libro}" | fecha_prestamo: ${fechaPrestamo} | dias: ${dias}`);
 
     const body = `
       <section>
