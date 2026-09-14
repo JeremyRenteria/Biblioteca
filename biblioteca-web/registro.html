@@ -1,0 +1,71 @@
+<!doctype html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Biblioteca El Roble — Registro de lector</title>
+  <link rel="stylesheet" href="/styles.css">
+</head>
+<body>
+  <header class="site-header">
+    <div class="wrap">
+      <a class="brand" href="/">
+        <span class="brand-mark">Biblioteca El Roble</span>
+        <span class="brand-tagline">un lugar para volver, libro tras libro</span>
+      </a>
+      <nav class="site-nav" aria-label="Navegación principal">
+        <ul>
+          <li><a href="/">Inicio</a></li>
+          <li><a href="/acerca">Acerca de</a></li>
+          <li><a href="/registro" aria-current="page">Registro</a></li>
+          <li><a href="/servicios">Servicios</a></li>
+        </ul>
+      </nav>
+    </div>
+  </header>
+
+  <main>
+    <section id="registro-intro" style="padding-bottom: 1rem;">
+      <div class="wrap">
+        <div class="section-heading">
+          <h2>Regístrate como lector</h2>
+        </div>
+        <p class="section-intro">Este es el primer paso para usar la biblioteca. Completa tus datos y el sistema te entregará un identificador de lector: guárdalo, porque lo necesitarás en la página de Servicios para solicitar un préstamo.</p>
+        <p class="section-intro" style="margin-top: 0.5rem;"><strong>Nota:</strong> Este proyecto fue subido por el dueño del repositorio: JeremyRenteria.</p>
+      </div>
+    </section>
+
+    <section id="formulario-registro" style="border-top: none; padding-top: 0;">
+      <div class="wrap">
+        <div class="form-panel">
+          <form action="/lectores" method="POST">
+            <div class="field">
+              <label for="nombre" class="required">Nombre completo</label>
+              <input type="text" id="nombre" name="nombre" required placeholder="Ej: Laura Gómez Restrepo">
+            </div>
+            <div class="field">
+              <label for="correo" class="required">Correo electrónico</label>
+              <input type="email" id="correo" name="correo" required placeholder="laura@ejemplo.com">
+            </div>
+            <div class="field">
+              <label for="telefono" class="required">Teléfono</label>
+              <input type="tel" id="telefono" name="telefono" required placeholder="300 000 0000">
+              <p class="hint">Lo usamos solo para avisarte sobre vencimientos de tus préstamos.</p>
+            </div>
+            <div class="form-actions">
+              <button type="submit">Registrarme</button>
+            </div>
+          </form>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <footer class="site-footer">
+    <div class="wrap">
+      <span>© 2026 Biblioteca El Roble</span>
+      <span><a href="/servicios">Ya tengo mi ID: ir a Servicios</a></span>
+    </div>
+  </footer>
+</body>
+</html>

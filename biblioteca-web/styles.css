@@ -1,0 +1,456 @@
+/* =========================================================
+   Biblioteca El Roble — hoja de estilos compartida
+   Paleta: verde bosque (estantería), pergamino (papel envejecido),
+   latón (herrajes), vino (lomos de cuero).
+   Tipografía: Fraunces (display, con carácter literario) + Inter (UI/lectura).
+   ========================================================= */
+
+@import url('https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,400;9..144,500;9..144,600;9..144,700&family=Inter:wght@400;500;600;700&display=swap');
+
+:root{
+  --color-bg: #ECE3CF;
+  --color-bg-soft: #E1D5B8;
+  --color-panel: #F6EFDD;
+  --color-ink: #241C14;
+  --color-ink-soft: #55493A;
+  --color-forest: #1F3A2E;
+  --color-forest-dark: #12241C;
+  --color-brass: #A97C3B;
+  --color-brass-light: #C99A55;
+  --color-wine: #6E2430;
+  --color-line: rgba(36, 28, 20, 0.16);
+
+  --font-display: 'Fraunces', Georgia, serif;
+  --font-body: 'Inter', system-ui, sans-serif;
+
+  --radius-sm: 3px;
+  --radius-md: 6px;
+
+  --shadow-panel: 0 1px 0 rgba(36,28,20,0.06), 0 8px 24px rgba(18,36,28,0.10);
+}
+
+*, *::before, *::after{ box-sizing: border-box; }
+
+html{ scroll-behavior: smooth; }
+
+body{
+  margin: 0;
+  background: var(--color-bg);
+  color: var(--color-ink);
+  font-family: var(--font-body);
+  font-size: 17px;
+  line-height: 1.6;
+  -webkit-font-smoothing: antialiased;
+}
+
+img{ max-width: 100%; display: block; }
+
+a{ color: inherit; }
+
+h1, h2, h3{
+  font-family: var(--font-display);
+  font-weight: 600;
+  line-height: 1.15;
+  margin: 0 0 0.5em;
+  color: var(--color-forest-dark);
+}
+
+h1{ font-size: clamp(2.2rem, 5vw, 3.4rem); font-weight: 700; }
+h2{ font-size: clamp(1.5rem, 3vw, 2rem); }
+h3{ font-size: 1.15rem; }
+
+p{ margin: 0 0 1em; max-width: 62ch; }
+
+:focus-visible{
+  outline: 3px solid var(--color-brass);
+  outline-offset: 2px;
+}
+
+/* ---------- Layout shell ---------- */
+.wrap{
+  width: min(1080px, 92%);
+  margin-inline: auto;
+}
+
+/* ---------- Header & nav (cinta de marcapáginas) ---------- */
+.site-header{
+  background: var(--color-forest);
+  color: var(--color-panel);
+  border-bottom: 4px solid var(--color-brass);
+}
+
+.site-header .wrap{
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  flex-wrap: wrap;
+  gap: 0.75rem;
+  padding-block: 1.1rem;
+}
+
+.brand{
+  display: flex;
+  align-items: baseline;
+  gap: 0.6rem;
+  text-decoration: none;
+  color: var(--color-panel);
+}
+
+.brand-mark{
+  font-family: var(--font-display);
+  font-weight: 700;
+  font-size: 1.5rem;
+  letter-spacing: 0.01em;
+}
+
+.brand-tagline{
+  font-size: 0.85rem;
+  color: var(--color-brass-light);
+  font-style: italic;
+}
+
+.site-nav ul{
+  list-style: none;
+  display: flex;
+  gap: 0.4rem;
+  margin: 0;
+  padding: 0;
+}
+
+.site-nav a{
+  display: inline-block;
+  padding: 0.5rem 0.9rem;
+  text-decoration: none;
+  color: var(--color-panel);
+  font-weight: 500;
+  font-size: 0.95rem;
+  border-radius: var(--radius-sm);
+  position: relative;
+}
+
+.site-nav a:hover{
+  background: rgba(246, 239, 221, 0.1);
+}
+
+.site-nav a[aria-current="page"]{
+  background: var(--color-brass);
+  color: var(--color-forest-dark);
+  font-weight: 600;
+}
+
+/* ---------- Hero: lomos de libros ---------- */
+.hero{
+  padding-block: 3.5rem 3rem;
+  border-bottom: 1px solid var(--color-line);
+}
+
+.hero .wrap{
+  display: grid;
+  grid-template-columns: 1.1fr 0.9fr;
+  gap: 2.5rem;
+  align-items: center;
+}
+
+.hero-copy .eyebrow-mark{
+  display: inline-block;
+  width: 34px;
+  height: 6px;
+  background: var(--color-brass);
+  margin-bottom: 1rem;
+}
+
+.hero-copy p{
+  color: var(--color-ink-soft);
+  font-size: 1.08rem;
+}
+
+.button-row{
+  display: flex;
+  gap: 0.9rem;
+  flex-wrap: wrap;
+  margin-top: 1.4rem;
+}
+
+.btn{
+  display: inline-block;
+  padding: 0.75rem 1.4rem;
+  border-radius: var(--radius-sm);
+  text-decoration: none;
+  font-weight: 600;
+  font-size: 0.95rem;
+  border: 2px solid transparent;
+  cursor: pointer;
+  font-family: var(--font-body);
+  transition: transform 0.15s ease, background 0.15s ease;
+}
+
+.btn-primary{
+  background: var(--color-wine);
+  color: #F6EFDD;
+}
+.btn-primary:hover{ background: #591c26; transform: translateY(-1px); }
+
+.btn-secondary{
+  background: transparent;
+  border-color: var(--color-forest);
+  color: var(--color-forest);
+}
+.btn-secondary:hover{ background: var(--color-forest); color: #fff; }
+
+/* Shelf illustration built from CSS, not an image */
+.shelf{
+  position: relative;
+  height: 230px;
+  display: flex;
+  align-items: flex-end;
+  gap: 6px;
+  padding-inline: 6px;
+  padding-bottom: 14px;
+  border-bottom: 8px solid var(--color-forest-dark);
+}
+
+.spine{
+  flex: 1 0 auto;
+  border-radius: 2px 2px 0 0;
+  box-shadow: inset -3px 0 0 rgba(0,0,0,0.12);
+}
+.spine:nth-child(1){ height: 78%; background: var(--color-wine); }
+.spine:nth-child(2){ height: 92%; background: var(--color-forest); }
+.spine:nth-child(3){ height: 65%; background: var(--color-brass); }
+.spine:nth-child(4){ height: 100%; background: #38564A; }
+.spine:nth-child(5){ height: 70%; background: #8A2E3B; }
+.spine:nth-child(6){ height: 85%; background: var(--color-forest-dark); }
+.spine:nth-child(7){ height: 58%; background: var(--color-brass-light); }
+
+/* ---------- Sections ---------- */
+section{
+  padding-block: 3rem;
+}
+
+section + section{
+  border-top: 1px solid var(--color-line);
+}
+
+.section-heading{
+  display: flex;
+  align-items: center;
+  gap: 0.7rem;
+  margin-bottom: 1.6rem;
+}
+
+.section-heading::before{
+  content: "";
+  width: 8px;
+  height: 28px;
+  background: var(--color-brass);
+  flex-shrink: 0;
+}
+
+.section-heading h2{ margin: 0; }
+
+.section-intro{
+  color: var(--color-ink-soft);
+  max-width: 68ch;
+}
+
+/* ---------- Cards / feature grid ---------- */
+.grid{
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 1.4rem;
+}
+
+.card{
+  background: var(--color-panel);
+  border: 1px solid var(--color-line);
+  border-left: 4px solid var(--color-forest);
+  padding: 1.4rem 1.5rem;
+  border-radius: var(--radius-sm);
+}
+
+.card h3{ margin-bottom: 0.5rem; }
+.card p{ color: var(--color-ink-soft); font-size: 0.96rem; margin-bottom: 0; }
+
+/* ---------- Steps (secuencia real: registrar -> solicitar) ---------- */
+.steps{
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 1.4rem;
+  counter-reset: step;
+}
+
+.steps li{
+  counter-increment: step;
+  background: var(--color-panel);
+  border: 1px solid var(--color-line);
+  padding: 1.4rem 1.5rem;
+  border-radius: var(--radius-sm);
+  position: relative;
+}
+
+.steps li::before{
+  content: counter(step);
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 30px;
+  height: 30px;
+  background: var(--color-forest);
+  color: var(--color-panel);
+  font-family: var(--font-display);
+  font-weight: 600;
+  border-radius: 50%;
+  margin-bottom: 0.7rem;
+}
+
+.steps li p{ margin: 0; color: var(--color-ink-soft); }
+.steps li h3{ margin-bottom: 0.35rem; }
+
+/* ---------- Forms ---------- */
+.form-panel{
+  background: var(--color-panel);
+  border: 1px solid var(--color-line);
+  border-radius: var(--radius-md);
+  padding: 2rem;
+  box-shadow: var(--shadow-panel);
+  max-width: 560px;
+}
+
+form .field{
+  margin-bottom: 1.3rem;
+}
+
+form label{
+  display: block;
+  font-weight: 600;
+  font-size: 0.92rem;
+  margin-bottom: 0.4rem;
+  color: var(--color-forest-dark);
+}
+
+form .hint{
+  font-size: 0.82rem;
+  color: var(--color-ink-soft);
+  margin-top: 0.35rem;
+}
+
+input, select{
+  width: 100%;
+  padding: 0.65rem 0.8rem;
+  font-size: 1rem;
+  font-family: var(--font-body);
+  border: 1.5px solid var(--color-line);
+  border-radius: var(--radius-sm);
+  background: #fff;
+  color: var(--color-ink);
+}
+
+input:focus, select:focus{
+  border-color: var(--color-brass);
+}
+
+input[required] + .hint::before,
+label.required::after{
+  content: " *";
+  color: var(--color-wine);
+}
+
+.form-actions{
+  margin-top: 1.6rem;
+}
+
+button[type="submit"]{
+  background: var(--color-forest);
+  color: #fff;
+  border: none;
+  padding: 0.8rem 1.6rem;
+  font-size: 1rem;
+  font-weight: 600;
+  font-family: var(--font-body);
+  border-radius: var(--radius-sm);
+  cursor: pointer;
+}
+
+button[type="submit"]:hover{ background: var(--color-forest-dark); }
+
+/* ---------- Result / confirmation panel (POST responses) ---------- */
+.result-panel{
+  background: var(--color-panel);
+  border: 1px solid var(--color-line);
+  border-left: 6px solid var(--color-brass);
+  border-radius: var(--radius-sm);
+  padding: 1.8rem 2rem;
+  max-width: 560px;
+}
+
+.result-panel.is-error{
+  border-left-color: var(--color-wine);
+}
+
+.result-id{
+  display: inline-block;
+  font-family: var(--font-display);
+  font-size: 2.2rem;
+  font-weight: 700;
+  color: var(--color-forest);
+  background: rgba(169, 124, 59, 0.15);
+  padding: 0.15em 0.5em;
+  border-radius: var(--radius-sm);
+  margin-block: 0.4rem 0.8rem;
+}
+
+/* ---------- Footer ---------- */
+.site-footer{
+  background: var(--color-forest-dark);
+  color: rgba(246,239,221,0.75);
+  padding-block: 1.8rem;
+  margin-top: 0;
+}
+
+.site-footer .wrap{
+  display: flex;
+  justify-content: space-between;
+  flex-wrap: wrap;
+  gap: 0.6rem;
+  font-size: 0.88rem;
+}
+
+.site-footer a{ color: var(--color-brass-light); text-decoration: none; }
+.site-footer a:hover{ text-decoration: underline; }
+
+/* ---------- Utility ---------- */
+.list-plain{
+  padding-left: 1.1rem;
+  color: var(--color-ink-soft);
+}
+.list-plain li{ margin-bottom: 0.4rem; }
+
+table.data-table{
+  width: 100%;
+  border-collapse: collapse;
+  margin-top: 1rem;
+}
+table.data-table th, table.data-table td{
+  text-align: left;
+  padding: 0.55rem 0.7rem;
+  border-bottom: 1px solid var(--color-line);
+  font-size: 0.92rem;
+}
+table.data-table th{
+  color: var(--color-forest-dark);
+  font-family: var(--font-display);
+  font-weight: 600;
+}
+
+/* ---------- Responsive ---------- */
+@media (max-width: 780px){
+  .hero .wrap{ grid-template-columns: 1fr; }
+  .grid{ grid-template-columns: 1fr; }
+  .steps{ grid-template-columns: 1fr; }
+  .site-header .wrap{ flex-direction: column; align-items: flex-start; }
+  .site-nav ul{ flex-wrap: wrap; }
+  .shelf{ height: 170px; }
+}

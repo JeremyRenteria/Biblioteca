@@ -1,0 +1,92 @@
+<!doctype html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Biblioteca El Roble — Servicios</title>
+  <link rel="stylesheet" href="/styles.css">
+</head>
+<body>
+  <header class="site-header">
+    <div class="wrap">
+      <a class="brand" href="/">
+        <span class="brand-mark">Biblioteca El Roble</span>
+        <span class="brand-tagline">un lugar para volver, libro tras libro</span>
+      </a>
+      <nav class="site-nav" aria-label="Navegación principal">
+        <ul>
+          <li><a href="/">Inicio</a></li>
+          <li><a href="/acerca">Acerca de</a></li>
+          <li><a href="/registro">Registro</a></li>
+          <li><a href="/servicios" aria-current="page">Servicios</a></li>
+        </ul>
+      </nav>
+    </div>
+  </header>
+
+  <main>
+    <section id="servicios-lista">
+      <div class="wrap">
+        <div class="section-heading">
+          <h2>Nuestros servicios</h2>
+        </div>
+        <p class="section-intro">Todo lector registrado puede usar estos servicios sin costo adicional.</p>
+        <div class="grid">
+          <article class="card">
+            <h3>Préstamo a domicilio</h3>
+            <p>Llévate el libro por los días que indiques en el formulario. Puedes renovarlo si nadie más lo está esperando.</p>
+          </article>
+          <article class="card">
+            <h3>Sala de lectura</h3>
+            <p>Un espacio silencioso, con enchufes disponibles, para leer o estudiar dentro de la biblioteca.</p>
+          </article>
+          <article class="card">
+            <h3>Orientación de lectura</h3>
+            <p>Si no sabes qué leer, el equipo de la biblioteca te recomienda un libro según tus gustos.</p>
+          </article>
+        </div>
+      </div>
+    </section>
+
+    <section id="formulario-prestamo">
+      <div class="wrap">
+        <div class="section-heading">
+          <h2>Solicitar un préstamo</h2>
+        </div>
+        <p class="section-intro">Necesitas el identificador de lector que obtuviste al registrarte. Si aún no te has registrado, hazlo primero en <a href="/registro">Registro</a>.</p>
+        <div class="form-panel">
+          <form action="/prestamos" method="POST">
+            <div class="field">
+              <label for="lector_id" class="required">ID de lector</label>
+              <input type="number" id="lector_id" name="lector_id" min="1" required placeholder="Ej: 3">
+              <p class="hint">Es el número que te mostró la página de Registro.</p>
+            </div>
+            <div class="field">
+              <label for="libro" class="required">Título del libro</label>
+              <input type="text" id="libro" name="libro" required placeholder="Ej: Cien años de soledad">
+            </div>
+            <div class="field">
+              <label for="fecha_prestamo" class="required">Fecha del préstamo</label>
+              <input type="date" id="fecha_prestamo" name="fecha_prestamo" required>
+            </div>
+            <div class="field">
+              <label for="dias" class="required">Días de préstamo</label>
+              <input type="number" id="dias" name="dias" min="1" max="60" required placeholder="Ej: 15">
+            </div>
+            <div class="form-actions">
+              <button type="submit">Solicitar préstamo</button>
+            </div>
+          </form>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <footer class="site-footer">
+    <div class="wrap">
+      <span>© 2026 Biblioteca El Roble</span>
+      <span><a href="/registro">Aún no tengo ID: registrarme</a></span>
+    </div>
+  </footer>
+</body>
+</html>

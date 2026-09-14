@@ -1,0 +1,89 @@
+<!doctype html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Biblioteca El Roble — Acerca de</title>
+  <link rel="stylesheet" href="/styles.css">
+</head>
+<body>
+  <header class="site-header">
+    <div class="wrap">
+      <a class="brand" href="/">
+        <span class="brand-mark">Biblioteca El Roble</span>
+        <span class="brand-tagline">un lugar para volver, libro tras libro</span>
+      </a>
+      <nav class="site-nav" aria-label="Navegación principal">
+        <ul>
+          <li><a href="/">Inicio</a></li>
+          <li><a href="/acerca" aria-current="page">Acerca de</a></li>
+          <li><a href="/registro">Registro</a></li>
+          <li><a href="/servicios">Servicios</a></li>
+        </ul>
+      </nav>
+    </div>
+  </header>
+
+  <main>
+    <section class="hero" style="padding-block: 2.8rem 2.2rem;">
+      <div class="wrap" style="grid-template-columns: 1fr; max-width: 68ch;">
+        <div class="hero-copy">
+          <span class="eyebrow-mark" aria-hidden="true"></span>
+          <h1>Un proyecto académico con vocación de barrio</h1>
+          <p>Esta aplicación se construyó como práctica evaluativa de Ingeniería Web, pero está pensada como si fuera el sistema real de una biblioteca pequeña: simple, honesto y funcional.</p>
+        </div>
+      </div>
+    </section>
+
+    <section id="quienes-somos">
+      <div class="wrap">
+        <div class="section-heading">
+          <h2>Quiénes somos</h2>
+        </div>
+        <p>El Roble es una biblioteca de barrio ficticia creada para esta práctica. Representa el tipo de lugar donde un vecino se registra una vez y vuelve muchas veces a pedir prestado un libro distinto.</p>
+        <p>El sitio funciona con un servidor propio escrito en Node.js, sin frameworks de interfaz, y guarda cada registro y cada préstamo en una base de datos SQLite que persiste entre reinicios del servidor.</p>
+      </div>
+    </section>
+
+    <section id="proposito">
+      <div class="wrap">
+        <div class="section-heading">
+          <h2>Propósito del sitio</h2>
+        </div>
+        <p>Demostrar, con un caso de uso concreto, el flujo completo de una aplicación web con persistencia: páginas HTML semánticas, una hoja de estilos externa, un servidor que atiende rutas GET y POST, formularios validados en el cliente y en el servidor, y dos tablas relacionadas mediante un identificador.</p>
+        <p>El lector se registra primero; ese registro genera un identificador único. Ese mismo identificador es lo único que se vuelve a pedir cuando el lector solicita un préstamo, para no repetir datos que el sistema ya conoce.</p>
+      </div>
+    </section>
+
+    <section id="horario">
+      <div class="wrap">
+        <div class="section-heading">
+          <h2>Horario y ubicación</h2>
+        </div>
+        <p class="section-intro">Datos de referencia del escenario ficticio de la práctica.</p>
+        <div class="grid">
+          <article class="card">
+            <h3>Horario</h3>
+            <p>Lunes a viernes, 8:00 a. m. a 6:00 p. m. Sábados, 9:00 a. m. a 1:00 p. m.</p>
+          </article>
+          <article class="card">
+            <h3>Ubicación</h3>
+            <p>Calle 10 # 4-32, barrio El Roble. A dos cuadras del parque principal.</p>
+          </article>
+          <article class="card">
+            <h3>Contacto</h3>
+            <p>elroble.biblioteca@ejemplo.edu.co — línea de atención 601 000 0000.</p>
+          </article>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <footer class="site-footer">
+    <div class="wrap">
+      <span>© 2026 Biblioteca El Roble</span>
+      <span><a href="/registro">Registrarme como lector</a></span>
+    </div>
+  </footer>
+</body>
+</html>
