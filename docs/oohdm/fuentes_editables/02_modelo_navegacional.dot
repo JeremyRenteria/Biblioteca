@@ -1,0 +1,45 @@
+// OOHDM - 2. Diseño navegacional - Biblioteca El Roble
+digraph nav {
+  graph [rankdir=TB, fontname="DejaVu Sans", fontsize=18, labelloc=t, nodesep=0.5, ranksep=0.9, pad=0.4,
+         label=<<B>Modelo navegacional (OOHDM) — Biblioteca El Roble</B>>];
+  node  [fontname="DejaVu Sans", fontsize=12, shape=box, style="rounded,filled", fillcolor="#EAF2FB", color="#2F5D8A"];
+  edge  [fontname="DejaVu Sans", fontsize=11, color="#444444"];
+
+  Menu [shape=folder, fillcolor="#FFF6CC", color="#B39500",
+        label=<<B>Estructura de acceso: Menú principal</B><BR/>(nav «Navegación principal»,<BR/>presente en las 4 páginas y en las respuestas)>];
+
+  Inicio    [label=<<B>Nodo Inicio</B><BR/>GET /  (index.html)>];
+  Acerca    [label=<<B>Nodo Acerca de</B><BR/>GET /acerca  (acerca.html)>];
+  Registro  [label=<<B>Nodo Registro</B><BR/>GET /registro  (registro.html)<BR/>formulario de Lector>];
+  Servicios [label=<<B>Nodo Servicios</B><BR/>GET /servicios  (servicios.html)<BR/>formulario de Préstamo>];
+
+  RegOk  [fillcolor="#E4F4E4", color="#2E7D32", label=<<B>Confirmación: Registro exitoso</B><BR/>POST /lectores → 201<BR/>muestra el ID de lector generado>];
+  PreOk  [fillcolor="#E4F4E4", color="#2E7D32", label=<<B>Confirmación: Préstamo registrado</B><BR/>POST /prestamos → 201<BR/>muestra ID de préstamo y resumen>];
+  Falta  [fillcolor="#FBE5E5", color="#B3261E", label=<<B>Respuesta: Faltan datos</B><BR/>400 (campos vacíos, valores inválidos<BR/>o lector inexistente)>];
+  NF     [fillcolor="#FBE5E5", color="#B3261E", label=<<B>Respuesta: Página no encontrada</B><BR/>404 (cualquier otra ruta)>];
+
+  Menu -> Inicio    [style=dashed, label="Inicio"];
+  Menu -> Acerca    [style=dashed, label="Acerca de"];
+  Menu -> Registro  [style=dashed, label="Registro"];
+  Menu -> Servicios [style=dashed, label="Servicios"];
+
+  Inicio -> Registro  [label="«Registrarme como lector»"];
+  Inicio -> Servicios [label="«Ver servicios»"];
+  Inicio -> Acerca    [label="«Acerca de este proyecto»"];
+  Acerca -> Registro  [label="«Registrarme como lector»"];
+  Servicios -> Registro [label="«Aún no tengo ID: registrarme»"];
+  Registro  -> Servicios [label="«Ya tengo mi ID: ir a Servicios»"];
+
+  Registro  -> RegOk  [label="registrar / guardar\nPOST /lectores\n(nombre, correo, telefono)", color="#2E7D32", fontcolor="#2E7D32"];
+  Registro  -> Falta  [label="envío incompleto", color="#B3261E", fontcolor="#B3261E"];
+  RegOk -> Servicios  [label="solicitar servicio\n«Ir a Servicios…»\n(el ID mostrado se escribe en lector_id)", color="#2E7D32", fontcolor="#2E7D32", penwidth=2];
+
+  Servicios -> PreOk  [label="solicitar servicio\nPOST /prestamos\n(lector_id, libro, fecha_prestamo, dias)", color="#2E7D32", fontcolor="#2E7D32", penwidth=2];
+  Servicios -> Falta  [label="datos incompletos, inválidos\no lector_id inexistente", color="#B3261E", fontcolor="#B3261E"];
+  PreOk -> Servicios  [label="volver\n«Solicitar otro préstamo»"];
+
+  Falta -> Registro  [label="volver\n«Volver al formulario de registro»\n(o «Registrarme como lector»)", style=dashed];
+  Falta -> Servicios [label="volver\n«Volver al formulario de préstamo»", style=dashed];
+  NF -> Inicio       [label="volver\n«Volver al inicio»", style=dashed];
+  Inicio -> NF       [label="ruta inexistente", style=dotted, color="#999999", fontcolor="#777777"];
+}

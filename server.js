@@ -275,6 +275,18 @@ async function handleRegistrarPrestamo(req, res) {
     );
   }
 
+  // Ajuste OOHDM: el formulario de /servicios declara dias entre 1 y 60;
+  // el servidor ahora aplica el mismo límite (ver docs/oohdm/OOHDM.md, sección 6).
+  if (dias > 60) {
+    return send400(
+      res,
+      '/servicios',
+      '/servicios',
+      'Volver al formulario de préstamo',
+      'Los días de préstamo deben estar entre 1 y 60.'
+    );
+  }
+
   try {
     const lector = findLectorById.get(lectorId);
     if (!lector) {

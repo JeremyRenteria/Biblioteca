@@ -1,0 +1,65 @@
+// OOHDM - 3. Interfaz abstracta (ADV) - Biblioteca El Roble
+digraph adv {
+  graph [rankdir=TB, fontname="DejaVu Sans", fontsize=18, labelloc=t, nodesep=0.5, ranksep=0.6, pad=0.4,
+         label=<<B>Interfaz abstracta (OOHDM) — formularios Registro y Servicios</B>>];
+  node  [fontname="DejaVu Sans", fontsize=12, shape=plain];
+  edge  [fontname="DejaVu Sans", fontsize=11];
+
+  Leyenda [label=<
+    <TABLE BORDER="1" CELLBORDER="1" CELLSPACING="0" CELLPADDING="4">
+      <TR><TD COLSPAN="6"><B>Tipos de elemento abstracto</B></TD></TR>
+      <TR><TD BGCOLOR="#E8E8E8">Información visible</TD><TD BGCOLOR="#DCEBFA">Campo de entrada (lo escribe el usuario)</TD><TD BGCOLOR="#E6DDF5">Dato conservado (viene de otro nodo)</TD>
+          <TD BGCOLOR="#FFE9B8">Botón / acción</TD><TD BGCOLOR="#D9F0D9">Respuesta del sistema (genera el servidor)</TD><TD BGCOLOR="#F6D5D5">Respuesta de error</TD></TR>
+    </TABLE>>];
+
+  ADV1 [label=<
+    <TABLE BORDER="1" CELLBORDER="1" CELLSPACING="0" CELLPADDING="5">
+      <TR><TD BGCOLOR="#2F5D8A" COLSPAN="2"><FONT COLOR="white"><B>ADV Registro — GET /registro → POST /lectores</B></FONT></TD></TR>
+      <TR><TD BGCOLOR="#E8E8E8" COLSPAN="2">Título «Regístrate como lector» · introducción · nota del autor</TD></TR>
+      <TR><TD BGCOLOR="#DCEBFA">nombre</TD><TD BGCOLOR="#DCEBFA">texto · obligatorio</TD></TR>
+      <TR><TD BGCOLOR="#DCEBFA">correo</TD><TD BGCOLOR="#DCEBFA">correo electrónico · obligatorio</TD></TR>
+      <TR><TD BGCOLOR="#DCEBFA">telefono</TD><TD BGCOLOR="#DCEBFA">teléfono · obligatorio (con ayuda visible)</TD></TR>
+      <TR><TD BGCOLOR="#FFE9B8" COLSPAN="2">Botón «Registrarme» → envía POST /lectores</TD></TR>
+      <TR><TD BGCOLOR="#EFEFEF" COLSPAN="2"><I>Sin datos ocultos: el servidor genera el ID</I></TD></TR>
+    </TABLE>>];
+
+  ADV2 [label=<
+    <TABLE BORDER="1" CELLBORDER="1" CELLSPACING="0" CELLPADDING="5">
+      <TR><TD BGCOLOR="#B4691F" COLSPAN="2"><FONT COLOR="white"><B>ADV Servicios — GET /servicios → POST /prestamos</B></FONT></TD></TR>
+      <TR><TD BGCOLOR="#E8E8E8" COLSPAN="2">Lista de servicios (3 tarjetas) · título «Solicitar un préstamo» · introducción</TD></TR>
+      <TR><TD BGCOLOR="#E6DDF5">lector_id</TD><TD BGCOLOR="#E6DDF5">DATO CONSERVADO: ID generado por el servidor en Registro<BR/>entero ≥ 1 · obligatorio · el usuario lo digita (no es campo oculto)</TD></TR>
+      <TR><TD BGCOLOR="#DCEBFA">libro</TD><TD BGCOLOR="#DCEBFA">texto · obligatorio</TD></TR>
+      <TR><TD BGCOLOR="#DCEBFA">fecha_prestamo</TD><TD BGCOLOR="#DCEBFA">fecha · obligatorio</TD></TR>
+      <TR><TD BGCOLOR="#DCEBFA">dias</TD><TD BGCOLOR="#DCEBFA">entero 1 a 60 · obligatorio</TD></TR>
+      <TR><TD BGCOLOR="#FFE9B8" COLSPAN="2">Botón «Solicitar préstamo» → envía POST /prestamos</TD></TR>
+      <TR><TD BGCOLOR="#EFEFEF" COLSPAN="2"><I>Sin datos ocultos: el servidor genera el ID de préstamo</I></TD></TR>
+    </TABLE>>];
+
+  OK1 [label=<
+    <TABLE BORDER="1" CELLBORDER="1" CELLSPACING="0" CELLPADDING="5">
+      <TR><TD BGCOLOR="#D9F0D9"><B>Envío correcto → 201 «¡Registro exitoso!»</B></TD></TR>
+      <TR><TD BGCOLOR="#D9F0D9">Muestra: nombre escrito por el usuario<BR/>y ID de lector <B>generado por SQLite</B><BR/>Enlace «Ir a Servicios…»</TD></TR>
+    </TABLE>>];
+  ER1 [label=<
+    <TABLE BORDER="1" CELLBORDER="1" CELLSPACING="0" CELLPADDING="5">
+      <TR><TD BGCOLOR="#F6D5D5"><B>Datos incompletos → 400 «Faltan datos»</B></TD></TR>
+      <TR><TD BGCOLOR="#F6D5D5">Nombre, correo o teléfono vacíos<BR/>Enlace «Volver al formulario de registro»</TD></TR>
+    </TABLE>>];
+  OK2 [label=<
+    <TABLE BORDER="1" CELLBORDER="1" CELLSPACING="0" CELLPADDING="5">
+      <TR><TD BGCOLOR="#D9F0D9"><B>Envío correcto → 201 «¡Préstamo registrado!»</B></TD></TR>
+      <TR><TD BGCOLOR="#D9F0D9">Muestra: nombre del lector (consultado por lector_id),<BR/>ID de préstamo <B>generado por SQLite</B>, libro,<BR/>fecha, días e ID de lector · Enlace «Solicitar otro préstamo»</TD></TR>
+    </TABLE>>];
+  ER2 [label=<
+    <TABLE BORDER="1" CELLBORDER="1" CELLSPACING="0" CELLPADDING="5">
+      <TR><TD BGCOLOR="#F6D5D5"><B>Datos incompletos o inválidos → 400 «Faltan datos»</B></TD></TR>
+      <TR><TD BGCOLOR="#F6D5D5">Campo vacío · lector_id o dias no enteros positivos ·<BR/>dias mayor que 60 · lector_id sin registrar<BR/>(enlace «Registrarme como lector»)</TD></TR>
+    </TABLE>>];
+
+  Leyenda -> ADV1 [style=invis]; Leyenda -> ADV2 [style=invis];
+  ADV1 -> OK1 [label=" envío correcto", color="#2E7D32", fontcolor="#2E7D32"];
+  ADV1 -> ER1 [label=" datos incompletos", color="#B3261E", fontcolor="#B3261E"];
+  ADV2 -> OK2 [label=" envío correcto", color="#2E7D32", fontcolor="#2E7D32"];
+  ADV2 -> ER2 [label=" datos incompletos\n o inválidos", color="#B3261E", fontcolor="#B3261E"];
+  OK1 -> ADV2 [label=" ID de lector\n(se digita en lector_id)", style=dashed, constraint=false];
+}

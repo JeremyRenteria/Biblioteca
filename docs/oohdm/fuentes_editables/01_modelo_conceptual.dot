@@ -1,0 +1,26 @@
+// OOHDM - 1. Diseño conceptual - Biblioteca El Roble
+digraph conceptual {
+  graph [rankdir=LR, fontname="DejaVu Sans", fontsize=18, labelloc=t,
+         label=<<B>Modelo conceptual (OOHDM) — Biblioteca El Roble</B>>, nodesep=0.6, ranksep=2.6, pad=0.4];
+  node  [shape=plain, fontname="DejaVu Sans", fontsize=13];
+  edge  [fontname="DejaVu Sans", fontsize=13];
+
+  Lector [label=<
+    <TABLE BORDER="1" CELLBORDER="0" CELLSPACING="0" CELLPADDING="6" BGCOLOR="#EAF2FB">
+      <TR><TD BGCOLOR="#2F5D8A"><FONT COLOR="white"><B>Lector</B></FONT></TD></TR>
+      <TR><TD ALIGN="LEFT">id : entero (identificador único)<BR ALIGN="LEFT"/>nombre : texto<BR ALIGN="LEFT"/>correo : texto<BR ALIGN="LEFT"/>telefono : texto<BR ALIGN="LEFT"/></TD></TR>
+    </TABLE>>];
+
+  Prestamo [label=<
+    <TABLE BORDER="1" CELLBORDER="0" CELLSPACING="0" CELLPADDING="6" BGCOLOR="#FDF3E3">
+      <TR><TD BGCOLOR="#B4691F"><FONT COLOR="white"><B>Préstamo</B></FONT></TD></TR>
+      <TR><TD ALIGN="LEFT">id : entero (identificador único)<BR ALIGN="LEFT"/>lector_id : entero (referencia a Lector.id)<BR ALIGN="LEFT"/>libro : texto<BR ALIGN="LEFT"/>fecha_prestamo : fecha<BR ALIGN="LEFT"/>dias : entero (duración)<BR ALIGN="LEFT"/></TD></TR>
+    </TABLE>>];
+
+  Lector -> Prestamo [dir=none, arrowhead=none, label="  solicita  ",
+                      taillabel="1", headlabel="0..*", labeldistance=3.5, labelfontsize=15];
+
+  Nota [shape=note, fontsize=12, style=filled, fillcolor="#F5F5F5",
+        label="Regla: todo Préstamo pertenece a exactamente\lun Lector existente; un Lector puede no tener\lningún Préstamo o tener muchos.\l"];
+  Nota -> Lector [style=dashed, arrowhead=none, constraint=false];
+}

@@ -144,3 +144,43 @@ Las evidencias están en `capturas/` y también se muestran en esta documentaci�
 ![Terminal](capturas/terminal.png)
 
 ![Página no encontrada](capturas/paginanoencontrada.png)
+
+## Documentación OOHDM
+
+La plataforma fue diseñada y documentada aplicando la metodología **OOHDM** (*Object-Oriented Hypermedia Design Method*). Toda la documentación está en [`docs/oohdm/`](docs/oohdm/OOHDM.md):
+
+- [`OOHDM.md`](docs/oohdm/OOHDM.md): explicación de los cuatro modelos, matriz de correspondencia diseño-código y hallazgos de consistencia.
+- [`01_modelo_conceptual.png`](docs/oohdm/01_modelo_conceptual.png): clases `Lector` y `Préstamo` con multiplicidad 1 — 0..*.
+- [`02_modelo_navegacional.png`](docs/oohdm/02_modelo_navegacional.png): nodos, menú, enlaces y uso del ID de lector.
+- [`03_interfaz_abstracta.png`](docs/oohdm/03_interfaz_abstracta.png): formularios de Registro y Servicios y sus respuestas.
+- [`04_implementacion.png`](docs/oohdm/04_implementacion.png): navegador, Node.js, rutas HTTP y SQLite.
+- [`fuentes_editables/`](docs/oohdm/fuentes_editables/): archivos `.dot` (Graphviz) de los cuatro diagramas.
+
+### Relación con la plataforma
+
+| Modelo OOHDM | Dónde se materializa |
+|---|---|
+| Conceptual | Tablas `lectores` y `prestamos` de `biblioteca.db` (`lector_id` enlaza ambas). |
+| Navegacional | Rutas `GET /`, `/acerca`, `/registro`, `/servicios` y respuestas de `POST /lectores` y `POST /prestamos`. |
+| Interfaz abstracta | Formularios de `registro.html` (`/lectores`) y `servicios.html` (`/prestamos`) y sus respuestas 201 y 400. |
+| Implementación | `server.js` (Node.js + `node:sqlite`), archivos HTML y `styles.css`. |
+
+![Modelo conceptual](docs/oohdm/01_modelo_conceptual.png)
+
+![Modelo navegacional](docs/oohdm/02_modelo_navegacional.png)
+
+![Interfaz abstracta](docs/oohdm/03_interfaz_abstracta.png)
+
+![Implementación](docs/oohdm/04_implementacion.png)
+
+### Ajuste derivado del análisis OOHDM
+
+Al contrastar los diagramas con el código se detectó que el formulario de `/servicios` limita `dias` a 1–60 pero el servidor no lo validaba. Ahora `POST /prestamos` responde 400 si `dias` supera 60. El resto del funcionamiento y la base de datos no cambian (detalle en la sección 6 de [`OOHDM.md`](docs/oohdm/OOHDM.md)).
+
+### Descargar, ejecutar y comprobar
+
+1. Descarga o clona el repositorio (`git clone https://github.com/JeremyRenteria/Biblioteca.git`) y entra a la carpeta.
+2. Ejecuta `node server.js` (requiere Node.js 24 o superior; no hay que instalar dependencias).
+3. Abre `http://localhost:3000/registro`, registra un lector y anota el ID.
+4. Abre `http://localhost:3000/servicios` y solicita un préstamo con ese ID; ambos registros quedan en `biblioteca.db`.
+5. Comprueba el rechazo: envía un préstamo con un ID inexistente o con `dias` mayor que 60 y verás la respuesta 400 «Faltan datos».

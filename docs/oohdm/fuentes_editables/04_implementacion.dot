@@ -1,0 +1,60 @@
+// OOHDM - 4. Implementación - Biblioteca El Roble
+digraph impl {
+  graph [rankdir=TB, fontname="DejaVu Sans", fontsize=20, labelloc=t, nodesep=0.5, ranksep=1.3, pad=0.4, compound=true,
+         label=<<B>Implementación / arquitectura (OOHDM) — Biblioteca El Roble</B>>];
+  node  [fontname="DejaVu Sans", fontsize=12, shape=box, style="rounded,filled", fillcolor="#FFFFFF"];
+  edge  [fontname="DejaVu Sans", fontsize=11];
+
+  Usuario [shape=oval, fillcolor="#FFF6CC", label="Usuario\n(lector)"];
+
+  subgraph cluster_nav {
+    label="Navegador"; style="rounded,filled"; fillcolor="#EEF5FC"; color="#2F5D8A";
+    Pag [shape=plain, style="", label=<
+      <TABLE BORDER="0" CELLBORDER="1" CELLSPACING="0" CELLPADDING="4" BGCOLOR="white">
+        <TR><TD BGCOLOR="#DCEBFA"><B>Nodos (HTML + styles.css)</B></TD></TR>
+        <TR><TD ALIGN="LEFT">Inicio → index.html<BR ALIGN="LEFT"/>Acerca de → acerca.html<BR ALIGN="LEFT"/>Registro → registro.html<BR ALIGN="LEFT"/>Servicios → servicios.html<BR ALIGN="LEFT"/>Respuestas → HTML generado por server.js<BR ALIGN="LEFT"/></TD></TR>
+      </TABLE>>];
+    F1 [label="&lt;form action=&quot;/lectores&quot; method=&quot;POST&quot;&gt;\nnombre · correo · telefono"];
+    F2 [label="&lt;form action=&quot;/prestamos&quot; method=&quot;POST&quot;&gt;\nlector_id · libro · fecha_prestamo · dias"];
+  }
+
+  subgraph cluster_srv {
+    label="Servidor Node.js — server.js (node:http, puerto 3000)"; style="rounded,filled"; fillcolor="#F3F8EE"; color="#2E7D32";
+    Rutas [shape=plain, style="", label=<
+      <TABLE BORDER="0" CELLBORDER="1" CELLSPACING="0" CELLPADDING="4" BGCOLOR="white">
+        <TR><TD BGCOLOR="#D9F0D9"><B>STATIC_ROUTES (GET)</B></TD></TR>
+        <TR><TD ALIGN="LEFT">/ → index.html<BR ALIGN="LEFT"/>/acerca → acerca.html<BR ALIGN="LEFT"/>/registro → registro.html<BR ALIGN="LEFT"/>/servicios → servicios.html<BR ALIGN="LEFT"/>/styles.css → styles.css<BR ALIGN="LEFT"/>otra ruta → send404 (404)<BR ALIGN="LEFT"/></TD></TR>
+      </TABLE>>];
+    H1 [label="POST /lectores\nhandleRegistrarLector\n201 · 400 · 500"];
+    H2 [label="POST /prestamos\nhandleRegistrarPrestamo\n201 · 400 · 500"];
+  }
+
+  subgraph cluster_db {
+    label="SQLite — biblioteca.db (node:sqlite, DatabaseSync)"; style="rounded,filled"; fillcolor="#FDF3E3"; color="#B4691F";
+    T1 [shape=plain, style="", label=<
+      <TABLE BORDER="1" CELLBORDER="1" CELLSPACING="0" CELLPADDING="4" BGCOLOR="white">
+        <TR><TD BGCOLOR="#B4691F"><FONT COLOR="white"><B>lectores</B> ← clase Lector</FONT></TD></TR>
+        <TR><TD ALIGN="LEFT">id INTEGER PK AUTOINCREMENT<BR ALIGN="LEFT"/>nombre TEXT · correo TEXT · telefono TEXT<BR ALIGN="LEFT"/></TD></TR>
+      </TABLE>>];
+    T2 [shape=plain, style="", label=<
+      <TABLE BORDER="1" CELLBORDER="1" CELLSPACING="0" CELLPADDING="4" BGCOLOR="white">
+        <TR><TD BGCOLOR="#B4691F"><FONT COLOR="white"><B>prestamos</B> ← clase Préstamo</FONT></TD></TR>
+        <TR><TD ALIGN="LEFT">id INTEGER PK AUTOINCREMENT<BR ALIGN="LEFT"/>lector_id INTEGER (→ lectores.id, validado en código)<BR ALIGN="LEFT"/>libro TEXT · fecha_prestamo TEXT · dias INTEGER<BR ALIGN="LEFT"/></TD></TR>
+      </TABLE>>];
+  }
+
+  Usuario -> Pag [dir=both, label="ve y navega"];
+  Pag -> Rutas [label="GET /, /acerca, /registro,\n/servicios, /styles.css", color="#2F5D8A", fontcolor="#2F5D8A"];
+  Rutas -> Pag [label="200 HTML / CSS\n(fs.readFile)", style=dashed, color="#2F5D8A", fontcolor="#2F5D8A"];
+  Usuario -> F1 [label="llena y envía", style=dotted];
+  Usuario -> F2 [label="llena y envía", style=dotted];
+  F1 -> H1 [label="POST /lectores\n(application/x-www-form-urlencoded)", color="#B3261E", fontcolor="#B3261E"];
+  F2 -> H2 [label="POST /prestamos\n(application/x-www-form-urlencoded)", color="#B3261E", fontcolor="#B3261E"];
+  H1 -> Pag [label="HTML 201 / 400", style=dashed, color="#B3261E", constraint=false];
+  H2 -> Pag [label="HTML 201 / 400", style=dashed, color="#B3261E", constraint=false];
+
+  H1 -> T1 [label="INSERT INTO lectores\n(nombre, correo, telefono)\nVALUES (?, ?, ?)", color="#B4691F", fontcolor="#B4691F"];
+  H2 -> T1 [label="SELECT id, nombre FROM lectores\nWHERE id = ?", color="#B4691F", fontcolor="#B4691F"];
+  H2 -> T2 [label="INSERT INTO prestamos\n(lector_id, libro, fecha_prestamo, dias)\nVALUES (?, ?, ?, ?)", color="#B4691F", fontcolor="#B4691F"];
+  T1 -> T2 [label="1 — 0..*\n(lector_id)", style=dashed, arrowhead=crow, arrowtail=tee, dir=both];
+}
